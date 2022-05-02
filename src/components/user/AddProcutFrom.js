@@ -10,12 +10,12 @@ const AddProductForm = ({ close }) => {
     quantity: 1,
   });
 
-  const [imageFile, setImageFile] = React.useState();
+  const [imageFile, setImageFile] = React.useState("");
 
   const queryClient = useQueryClient();
 
   const { mutate, isLoading } = useMutation(createProduct, {
-    onSuccess:() => queryClient.refetchQueries(['products']),
+    onSuccess: () => queryClient.refetchQueries(["products"]),
   });
 
   const handleChange = (e) => {
@@ -39,9 +39,12 @@ const AddProductForm = ({ close }) => {
       alert("Product Price required");
     } else {
       const formData = new FormData();
-      formData.append("file", imageFile);
-      formData.append("productData", productData);
-      mutate(productData);
+      formData.append("productImg", imageFile);
+      formData.append("name", productData.name);
+      formData.append("price", productData.price);
+      formData.append("quantity", productData.quantity);
+      formData.append("description", productData.description);
+      mutate(formData);
       // const file
       setImageFile({});
       setProductData({
@@ -60,7 +63,7 @@ const AddProductForm = ({ close }) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <label htmlFor="name">Name: </label>
         <br />
         <input
@@ -100,7 +103,7 @@ const AddProductForm = ({ close }) => {
         />
         <br />
         <br />
-        <input type="file" name="image" onChange={handleImageChange} />
+        <input type="file" filename="productImg" onChange={handleImageChange} />
         <br />
         <br />
         <button type="submit">Add Product</button>

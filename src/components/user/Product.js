@@ -39,6 +39,11 @@ const Product = ({ product }) => {
         />
       ) : (
         <ul>
+          <img
+            src={`http://localhost:8080/images/${product.imageUrl}`}
+            alt="..."
+            width={100}
+          />
           <li>Name: {product.name}</li>
           <li>Price: {product.price}</li>
           <li>Quantity: {product.quantity}</li>

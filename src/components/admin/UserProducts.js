@@ -13,6 +13,11 @@ const UserProducts = ({ user }) => {
       {data?.data?.map((product) => (
         <div key={product._id}>
           <ul>
+            <img
+              src={`http://localhost:8080/images/${product.imageUrl}`}
+              alt="..."
+              width={100}
+            />
             <li>
               <strong>Product Name: {product.name}</strong>
             </li>
