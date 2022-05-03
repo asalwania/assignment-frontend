@@ -29,6 +29,19 @@ export const login = async ({ email, password }) => {
   }
 };
 
+export const logout = async ({ email, sessionId }) => {
+  try {
+    const session = await axios.post(`${baseUrl}/api/user/logout`, {
+      email,
+      sessionId,
+    });
+
+    return session;
+  } catch (error) {
+    return error;
+  }
+};
+
 export const addUser = async (userData) => {
   try {
     const user = request({
@@ -73,14 +86,14 @@ export const getAllProducts = async () => {
   }
 };
 
-export const getProdutsById = async ({userId}) => {
+export const getProdutsById = async ({ userId }) => {
   try {
     const products = request({ url: `${baseUrl}/api/user/products/${userId}` });
     return products;
   } catch (error) {
     return error;
   }
-}
+};
 
 export const deleteProduct = async (productId) => {
   try {
@@ -103,6 +116,26 @@ export const updateProduct = async (productData) => {
       data: productData,
     });
     return response;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getProdutsBySession = async ({ sessionId }) => {
+  try {
+    const products = request({
+      url: `${baseUrl}/api/user/products/${sessionId}`,
+    });
+    return products;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getAllSessions = async ({ userId }) => {
+  try {
+    const sessions = request({ url: `${baseUrl}/api/user/sessions/${userId}` });
+    return sessions;
   } catch (error) {
     return error;
   }

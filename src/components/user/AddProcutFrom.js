@@ -1,6 +1,19 @@
 import React from "react";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useMutation, useQueryClient } from "react-query";
 import { createProduct } from "../../api/axios";
+
+const theme = createTheme();
 
 const AddProductForm = ({ close }) => {
   const [productData, setProductData] = React.useState({
@@ -63,51 +76,92 @@ const AddProductForm = ({ close }) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <label htmlFor="name">Name: </label>
-        <br />
-        <input
-          onChange={handleChange}
-          name="name"
-          value={productData.name}
-          placeholder="name"
-        />
-        <br />
-        <label htmlFor="price">Price: </label>
-        <br />
-        <input
-          onChange={handleChange}
-          type="number"
-          name="price"
-          value={productData.price}
-          placeholder="price"
-        />
-        <br />
-        <label htmlFor="quantity">Quantity: </label>
-        <br />
-        <input
-          onChange={handleChange}
-          type="number"
-          name="quantity"
-          value={productData.quantity}
-          placeholder="quantity (optional, Default 1)"
-        />
-        <br />
-        <label htmlFor="description">Description: </label>
-        <br />
-        <input
-          onChange={handleChange}
-          name="description"
-          value={productData.description}
-          placeholder="description (optional)"
-        />
-        <br />
-        <br />
-        <input type="file" filename="productImg" onChange={handleImageChange} />
-        <br />
-        <br />
-        <button type="submit">Add Product</button>
-      </form>
+      <ThemeProvider theme={theme}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography component="h1" variant="h5">
+              Add New User
+            </Typography>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
+            ></Box>
+            <form onSubmit={handleSubmit} encType="multipart/form-data">
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                onChange={handleChange}
+                id="name"
+                label="Name"
+                name="name"
+                autoComplete="name"
+                value={productData.name}
+                placeholder="name"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                onChange={handleChange}
+                id="price"
+                label="Price"
+                name="price"
+                autoComplete="price"
+                value={productData.price}
+                placeholder="price"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                onChange={handleChange}
+                id="quantity"
+                label="Quantity"
+                name="quantity"
+                autoComplete="quantity"
+                value={productData.quantity}
+                placeholder="quantity"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                onChange={handleChange}
+                id="description"
+                label="Quantity"
+                name="description"
+                autoComplete="description"
+                value={productData.description}
+                placeholder="description"
+                autoFocus
+              />
+              <input
+                type="file"
+                filename="productImg"
+                onChange={handleImageChange}
+              />
+              <br />
+              <br />
+              <Button type="submit">Add Product</Button>
+              <Button type="submit">Cancel</Button>
+            </form>
+          </Box>
+        </Container>
+      </ThemeProvider>
     </div>
   );
 };
