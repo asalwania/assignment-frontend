@@ -1,4 +1,7 @@
 import React from "react";
+import TableCell from "@mui/material/TableCell";
+import Button from "@mui/material/Button";
+import TableRow from "@mui/material/TableRow";
 import { useMutation, useQueryClient } from "react-query";
 import { deleteProduct, updateProduct } from "../../api/axios";
 import UpdateProductForm from "./UpdateProductForm";
@@ -30,31 +33,36 @@ const Product = ({ product }) => {
   if (isDeleteing) return "Deleting..";
 
   return (
-    <li>
-      {/* <img src="" /> */}
-      {openEditForm ? (
+    <>
+      <TableRow
+        key={product._id}
+        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+      >
+        <TableCell align="center">
+          <img
+            width={80}
+            src={`http://localhost:8080/images/${product.imageUrl}`}
+            alt="..."
+          />
+        </TableCell>
+        <TableCell align="center">{product.name}</TableCell>
+        <TableCell align="center">${product.price}</TableCell>
+        <TableCell align="center">${product.quantity}</TableCell>
+        <TableCell align="center">{product.description}</TableCell>
+        <TableCell align="center">
+          <Button onClick={() => setOpenEditForm(!openEditForm)}>
+            {openEditForm ? "Cancel" : "Edit"}
+          </Button>
+          <Button onClick={onDeleteProduct}>Delete</Button>
+        </TableCell>
+      </TableRow>
+      {openEditForm && (
         <UpdateProductForm
           close={() => setOpenEditForm(false)}
           product={product}
         />
-      ) : (
-        <ul>
-          <img
-            src={`http://localhost:8080/images/${product.imageUrl}`}
-            alt="..."
-            width={100}
-          />
-          <li>Name: {product.name}</li>
-          <li>Price: {product.price}</li>
-          <li>Quantity: {product.quantity}</li>
-          <li>Description: {product.description}</li>
-        </ul>
       )}
-      <button onClick={() => setOpenEditForm(!openEditForm)}>
-        {openEditForm ? "Cancel" : "Edit"}
-      </button>
-      <button onClick={onDeleteProduct}>Delete</button>
-    </li>
+    </>
   );
 };
 

@@ -1,16 +1,17 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { getProdutsById } from "../../api/axios";
+import { getProdutsBySession } from "../../api/axios";
 
-const UserProducts = ({ user }) => {
-  const { isLoading, data } = useQuery("userProducts", () =>
-    getProdutsById({ userId: user._id })
+const UserProducts = ({ user,sessionId }) => {
+  const { isLoading, data } = useQuery("sessionProducts", () =>
+    getProdutsBySession({ sessionId })
   );
+  console.log(data)
   if (isLoading) return "Loading...";
   return (
     <ol>
       <h3>Products of {user.name}</h3>
-      {data?.data?.map((product) => (
+      {data?.data?.products.map((product) => (
         <div key={product._id}>
           <ul>
             <img

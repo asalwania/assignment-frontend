@@ -1,6 +1,4 @@
 import React from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
@@ -10,13 +8,27 @@ import Register from "./components/admin/RegisterUser";
 import RequiredAuth from "./components/RequiredAuth";
 import User from "./components/user";
 import useAuth from "./hooks/useAuth";
+import { logout } from "./api/axios";
+import { useMutation } from "react-query";
+import UserActivities from "./components/admin/UserActivities";
+import SessionProducts from "./components/admin/SessionProducts";
 
-// Create a client
-const queryClient = new QueryClient();
+const user = JSON.parse(localStorage.getItem("user"));
+
+const email = user?.email;
+const sessionId = user?.sessionId;
 
 function App() {
   const { setAuth } = useAuth();
   const navigate = useNavigate();
+
+  const { mutate } = useMutation(logout, {
+    onSuccess: () => {
+      setAuth({});
+      navigate("/");
+      localStorage.removeItem("user");
+    },
+  });
 
   React.useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -26,34 +38,29 @@ function App() {
         setAuth({ user: decodedToken.name, role: decodedToken.role });
         navigate(decodedToken.role, { replace: true });
       } else {
-        setAuth({});
-        navigate("/");
-        localStorage.removeItem("user");
+        mutate({ sessionId, email });
       }
     } else {
-      setAuth({});
-      navigate("/");
+      mutate({ sessionId, email });
     }
   }, []);
   return (
-    // Provide the client to your App
-    <QueryClientProvider client={queryClient}>
-      <Routes>
-        {/* public routes */}
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+    <Routes>
+      {/* public routes */}
+      <Route path="/" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
-        {/* protected routes for user */}
-        <Route element={<RequiredAuth allowedRoles={["user"]} />}>
-          <Route path="/user" element={<User />} />
-        </Route>
-        {/* protected routes for admin */}
-        <Route element={<RequiredAuth allowedRoles={["admin"]} />}>
-          <Route path="/admin" element={<Admin />} />
-        </Route>
-      </Routes>
-      <ReactQueryDevtools />
-    </QueryClientProvider>
+      {/* protected routes for user */}
+      <Route element={<RequiredAuth allowedRoles={["user"]} />}>
+        <Route path="/user" element={<User />} />
+      </Route>
+      {/* protected routes for admin */}
+      <Route element={<RequiredAuth allowedRoles={["admin"]} />}>
+        <Route path="/admin" element={<Admin />} />
+        <Route path="admin/:userId" element={<UserActivities />} />
+        <Route path="admin/:sessionId/products" element={<SessionProducts />} />
+      </Route>
+    </Routes>
   );
 }
 

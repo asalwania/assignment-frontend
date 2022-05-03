@@ -1,42 +1,39 @@
 import React from "react";
-import UserProducts from "./UserProducts";
+import TableCell from "@mui/material/TableCell";
+import Button from "@mui/material/Button";
+import TableRow from "@mui/material/TableRow";
+import { useNavigate } from "react-router-dom";
 
 const User = ({ user }) => {
-  const [showProducts, setShowProducts] = React.useState(false);
+  const navigate = useNavigate();
   return (
-    <li>
-      {showProducts ? (
-        <UserProducts user={user} />
-      ) : (
-        <ul>
-          <li>
-            <strong>Name: </strong>
-            {user.name}
-          </li>
-          <li>
-            <strong>Email: </strong>
-            {user.email}
-          </li>
-          <li>
-            <strong>Phone: </strong>
-            {user.phone}
-          </li>
-          <li>
-            <strong>Address: </strong>
-            {user.address}
-          </li>
-          <li>
-            <strong>Added On: </strong>
-            {new Date(user.createdAt).toLocaleString()}
-          </li>
-        </ul>
-      )}
-
-      <br />
-      <button onClick={() => {setShowProducts(!showProducts)}}>
-        {showProducts ? "Back" : `Products added by ${user.name}`}
-      </button>
-    </li>
+    <TableRow
+      key={user._id}
+      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+    >
+      <TableCell align="center" component="th" scope="row">
+        {user.name}
+      </TableCell>
+      <TableCell
+        style={{ color: user.isActive ? "Green" : "red" }}
+        align="center"
+      >
+        {user.isActive ? "Online" : "Ofline"}
+      </TableCell>
+      <TableCell align="center">{user.email}</TableCell>
+      <TableCell align="center">{user.phone}</TableCell>
+      <TableCell align="center">{user.address}</TableCell>
+      <TableCell align="center">{user.createdAt}</TableCell>
+      <TableCell align="center">
+        <Button
+          onClick={() => {
+            navigate(`${user._id}`);
+          }}
+        >
+          Acivities
+        </Button>
+      </TableCell>
+    </TableRow>
   );
 };
 
