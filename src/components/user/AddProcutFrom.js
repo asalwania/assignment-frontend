@@ -142,7 +142,7 @@ const AddProductForm = ({ close }) => {
                 fullWidth
                 onChange={handleChange}
                 id="description"
-                label="Quantity"
+                label="Description"
                 name="description"
                 autoComplete="description"
                 value={productData.description}
